@@ -111,40 +111,58 @@ document.addEventListener('DOMContentLoaded', function() {
         '#8E44AD'  // Dark Purple
     ];
 
-    projects.forEach((project, index) => {
-        const color = colors[index % colors.length];
+        projects.forEach((project, index) => {
+            const color = colors[index % colors.length];
 
-        // Create segment
-        const segment = document.createElement('div');
-        segment.className = 'project-segment';
+            // Create segment
+            const segment = document.createElement('div');
+            segment.className = 'project-segment';
+            segment.dataset.projectIndex = index;
 
-        const topPercent = ((project.start - minYear) / yearRange) * 100;
-        const heightPercent = ((project.end - project.start) / yearRange) * 100;
+            const topPercent = ((project.start - minYear) / yearRange) * 100;
+            const heightPercent = ((project.end - project.start) / yearRange) * 100;
 
-        segment.style.top = `${topPercent}%`;
-        segment.style.height = `${heightPercent}%`;
-        segment.style.backgroundColor = color;
-        segment.title = `${project.start} – ${project.end}`;
+            segment.style.top = `${topPercent}%`;
+            segment.style.height = `${heightPercent}%`;
+            segment.style.backgroundColor = color;
+            segment.title = `${project.start} – ${project.end}`;
 
-        segmentsContainer.appendChild(segment);
+            segmentsContainer.appendChild(segment);
 
-        // Apply color to matching project card
-        const eventCards = document.querySelectorAll('.event');
-        const matchingCard = eventCards[index];
-        if (matchingCard) {
-            const content = matchingCard.querySelector('.content');
-            const timeBadge = matchingCard.querySelector('.event-time');
+            // Apply color to matching project card
+            const eventCards = document.querySelectorAll('.event');
+            const matchingCard = eventCards[index];
+            if (matchingCard) {
+                const content = matchingCard.querySelector('.content');
+                const timeBadge = matchingCard.querySelector('.event-time');
 
-            if (content) {
-                content.style.borderColor = color;
-                content.style.boxShadow = `0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0 3px ${color}`;
+                if (content) {
+                    content.style.borderColor = color;
+                    content.style.boxShadow = `0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0 3px ${color}`;
+                }
+
+                if (timeBadge) {
+                    timeBadge.style.backgroundColor = color;
+                }
+
+                // Add hover event to highlight matching segment
+                matchingCard.addEventListener('mouseenter', function() {
+                    const segments = document.querySelectorAll('.project-segment');
+                    const matchingSegment = segments[index];
+                    if (matchingSegment) {
+                        matchingSegment.classList.add('highlighted');
+                    }
+                });
+
+                matchingCard.addEventListener('mouseleave', function() {
+                    const segments = document.querySelectorAll('.project-segment');
+                    const matchingSegment = segments[index];
+                    if (matchingSegment) {
+                        matchingSegment.classList.remove('highlighted');
+                    }
+                });
             }
-
-            if (timeBadge) {
-                timeBadge.style.backgroundColor = color;
-            }
-        }
-    });
+        });
 });
 </script>
 {% endblock content %}

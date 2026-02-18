@@ -1,0 +1,28 @@
+# Software tools developed by the team
+
+[[software]]
+name = "SAVANT"
+description = "Semi-Automated Video ANnotation Toolkit. Tools for automated annotation (markit), manual correction and quality control (edit) and dataset management for model training (trainit). Default AI model and object ontology focus on vehicle annotation from aerial perspective video."
+website = "https://github.com/RI-SE/SAVANT"
+github = "https://github.com/RI-SE/SAVANT"
+documentation = "https://github.com/RI-SE/SAVANT"
+
+[[software]]
+name = "Valu3s Toolkit"
+description = "Verification and validation tools for automated systems safety and security"
+website = "https://repo.valu3s.eu/"
+github = ""
+documentation = ""
+
+[[software]]
+name = "WayWiseR"
+description = "A ROS2-based rapid prototyping platform for validating autonomous vehicle functions in simulation and real-world testing."
+website = "https://github.com/RISE-Dependable-Transport-Systems/WayWiseR"
+github = "https://github.com/RISE-Dependable-Transport-Systems/WayWiseR"
+documentation = "https://github.com/RISE-Dependable-Transport-Systems/WayWiseR"
+[[software]]
+name = "ScenarioDB "
+description = "Database of scenarios for driving systems"
+website = ""
+github = "https://github.com/"
+documentation = "https://github.com/"

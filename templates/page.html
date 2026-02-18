@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<div class="page-template">
+    <div class="container">
+        <article class="page-content">
+            <header class="page-header">
+                <h1>{{ page.title }}</h1>
+                
+                {% if page.extra.year_start %}
+                <div class="page-years">
+                    <strong>{{ macros::t(key="page.project_period") }}</strong>
+                    {{ page.extra.year_start }}{% if page.extra.year_end %} - {{ page.extra.year_end }}{% else %} - {{ macros::t(key="common.present") }}{% endif %}
+                </div>
+                {% endif %}
+                
+                {% if page.extra.title %}
+                <div class="page-title-field">
+                    <strong>{{ macros::t(key="page.position") }}</strong> {{ page.extra.title }}
+                </div>
+                {% endif %}
+            </header>
+            
+            <div class="page-body">
+                {{ page.content | safe }}
+            </div>
+            
+            {% if page.extra.people %}
+            <div class="project-people">
+                <h2>{{ macros::t(key="page.people_involved") }}</h2>
+                <div class="people-grid">
+                    {% for person_slug in page.extra.people %}
+                    {% if page.lang and page.lang != "en" %}
+                        {% set person = get_page(path=page.lang ~ "/team/" ~ person_slug ~ ".md") %}
+                    {% else %}
+                        {% set person = get_page(path="team/" ~ person_slug ~ ".md") %}
+                    {% endif %}
+                    {% if person %}
+                    <a href="{{ person.permalink }}" class="person-link">
+                        {% if person.extra.image %}
+                        <div class="person-image">
+                            <img src="{{ person.extra.image }}" alt="{{ person.title }}">
+                        </div>
+                        {% endif %}
+                        <div class="person-info">
+                            <h3>{{ person.title }}</h3>
+                            {% if person.extra.title %}
+                            <p>{{ person.extra.title }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if page.extra.url or page.extra.code or page.extra.video %}
+            <div class="project-links">
+                <h2>{{ macros::t(key="page.links") }}</h2>
+                <div class="links-container">
+                    {% if page.extra.url %}
+                    <a href="{{ page.extra.url }}" class="project-link" target="_blank" rel="noopener">
+                        <i class="fas fa-external-link-alt"></i> {{ macros::t(key="common.website") }}
+                    </a>
+                    {% endif %}
+                    {% if page.extra.code %}
+                    <a href="{{ page.extra.code }}" class="project-link" target="_blank" rel="noopener">
+                        <i class="fab fa-github"></i> {{ macros::t(key="common.code") }}
+                    </a>
+                    {% endif %}
+                    {% if page.extra.video %}
+                    <a href="{{ page.extra.video }}" class="project-link" target="_blank" rel="noopener">
+                        <i class="fab fa-youtube"></i> {{ macros::t(key="common.video") }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+             {% if page.extra.email %}
+            <div class="member-contact">
+                <a href="mailto:{{ page.extra.email }}" class="contact-button">
+                    <i class="fas fa-envelope"></i> {{ page.extra.email }}
+                </a>
+            </div>
+            {% endif %}
+            
+             {% if page.extra.google_scholar or page.extra.linkedin or page.extra.orcid %}
+             <div class="member-social-links">
+                 <h2>{{ macros::t(key="common.profiles") }}</h2>
+                 <div class="social-links-container">
+                     {% if page.extra.google_scholar %}
+                     <a href="{{ page.extra.google_scholar }}" class="social-profile-link" target="_blank" rel="noopener">
+                         <i class="fas fa-graduation-cap"></i> Google Scholar
+                     </a>
+                     {% endif %}
+                     {% if page.extra.linkedin %}
+                     <a href="{{ page.extra.linkedin }}" class="social-profile-link" target="_blank" rel="noopener">
+                         <i class="fab fa-linkedin"></i> LinkedIn
+                     </a>
+                     {% endif %}
+                     {% if page.extra.orcid %}
+                     <a href="{{ page.extra.orcid }}" class="social-profile-link" target="_blank" rel="noopener">
+                         <i class="fas fa-id-card"></i> ORCID
+                     </a>
+                     {% endif %}
+                 </div>
+             </div>
+             {% endif %}
+            
+             {% if page.lang and page.lang != "en" %}
+                 {% set projects_section = get_section(path=page.lang ~ "/projects/_index.md") %}
+             {% else %}
+                 {% set projects_section = get_section(path="projects/_index.md") %}
+             {% endif %}
+             {% set has_member_projects = false %}
+             {% for project in projects_section.pages %}
+             {% if project.extra.people and page.slug in project.extra.people %}
+             {% set_global has_member_projects = true %}
+             {% endif %}
+             {% endfor %}
+            
+             {% if has_member_projects %}
+             <div class="member-projects-section">
+                 <h2>{{ macros::t(key="page.projects") }}</h2>
+                 <div class="projects-grid-member">
+                     {% for project in projects_section.pages %}
+                     {% if project.extra.people and page.slug in project.extra.people %}
+                     <a href="{{ project.permalink }}" class="project-card-member">
+                         <h3>{{ project.title }}</h3>
+                         <span class="project-years">{{ project.extra.year_start }}{% if project.extra.year_end %} - {{ project.extra.year_end }}{% else %} - {{ macros::t(key="common.present") }}{% endif %}</span>
+                         {% if project.extra.description %}
+                         <p>{{ project.extra.description }}</p>
+                         {% endif %}
+                     </a>
+                     {% endif %}
+                     {% endfor %}
+                 </div>
+             </div>
+             {% endif %}
+        </article>
+    </div>
+</div>
+
+<style>
+.page-template {
+    padding: 4rem 0;
+}
+
+.page-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.page-years,
+.page-title-field {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.page-years strong,
+.page-title-field strong {
+    color: var(--primary-color);
+}
+
+.page-body {
+    line-height: 1.7;
+    color: var(--text-color);
+    font-size: 1.1rem;
+}
+
+.page-body h2,
+.page-body h3,
+.page-body h4 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.page-body p {
+    margin-bottom: 1.5rem;
+}
+
+.page-body ul,
+.page-body ol {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.page-body li {
+    margin-bottom: 0.5rem;
+}
+
+.project-people {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+}
+
+.project-people h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.person-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.person-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+    border-color: var(--primary-color);
+}
+
+.person-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.person-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.person-info h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.person-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.project-links {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+}
+
+.project-links h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.links-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.project-link:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.member-contact {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.contact-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+ .contact-button:hover {
+     background-color: var(--accent-color);
+     transform: translateY(-2px);
+     box-shadow: var(--hover-shadow);
+ }
+
+ .member-social-links {
+     margin-top: 3rem;
+     padding: 2rem;
+     background-color: var(--card-background);
+     border: 1px solid var(--border-color);
+     border-radius: 0.5rem;
+ }
+
+ .member-social-links h2 {
+     margin-top: 0;
+     margin-bottom: 1.5rem;
+     color: var(--primary-color);
+ }
+
+ .social-links-container {
+     display: flex;
+     gap: 1rem;
+     flex-wrap: wrap;
+ }
+
+ .social-profile-link {
+     display: inline-flex;
+     align-items: center;
+     gap: 0.5rem;
+     padding: 0.75rem 1.5rem;
+     background-color: var(--border-color);
+     color: var(--text-color);
+     text-decoration: none;
+     border-radius: 0.375rem;
+     font-weight: 500;
+     transition: all 0.3s ease;
+ }
+
+ .social-profile-link:hover {
+     background-color: var(--primary-color);
+     color: white;
+     transform: translateY(-2px);
+ }
+
+.social-profile-link i {
+    font-size: 1.1rem;
+}
+
+.member-projects-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+}
+
+.member-projects-section h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--primary-color);
+}
+
+.projects-grid-member {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.project-card-member {
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.project-card-member:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--hover-shadow);
+    border-color: var(--primary-color);
+}
+
+.project-card-member h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.project-years {
+    display: inline-block;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.project-card-member p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .people-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .links-container {
+        flex-direction: column;
+    }
+    
+    .project-link {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .projects-grid-member {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock content %}

@@ -1,0 +1,97 @@
+# Base URL for the site
+base_url = "localhost"
+
+# Site title
+title = "Dependable and Autonomous Systems"
+
+# Site description
+description = "Research unit focused on verification, validation, and supervisory control of automated systems"
+
+# Theme
+theme = "peritus"
+
+# Generate RSS feeds
+generate_feeds = true
+
+# Compile Sass
+compile_sass = true
+
+# Build search index
+build_search_index = false
+
+# Taxonomies
+taxonomies = []
+
+[markdown]
+# Enable smart punctuation
+smart_punctuation = true
+
+[extra]
+# Team information
+name = "Dependable and Autonomous Systems"
+role = "Research Unit"
+organization = "Research Institutes of Sweden"
+location = "Borås, Sweden"
+
+# Bio/about section, this is prominently displayed on the landing page
+bio = """
+The Dependable Autonomous Systems research unit at the Research Institutes of Sweden .....
+
+"""
+
+# Social links for the team
+researchgate_url = "https://www.researchgate.net/lab/RISE-Dependable-and-Autonomous-Systems-Fredrik-Warg"
+google_scholar_url = "https://scholar.google.com/citations?hl=en&user=u0gw3sEAAAAJ&view_op=list_works&sortby=pubdate"
+
+# Swedish configuration
+[extra.sv]
+name = "Pålitliga Autonoma System"
+role = "Forskningsenhet"
+organization = "Research Institute of Sweden"
+location = ", Sverige"
+
+# Navigation menu
+[[extra.menu]]
+name = "Team"
+url = "/team/"
+weight = 1
+
+[[extra.menu]]
+name = "Projects"
+url = "/projects/"
+weight = 2
+
+[[extra.menu]]
+name = "Timeline"
+url = "/timeline/"
+weight = 3
+
+[[extra.menu]]
+name = "Software"
+url = "/software/"
+weight = 4
+
+# Color theme configuration
+[extra.colors]
+# Light mode (default)
+primary_color = "#003660"    # Navy blue
+secondary_color = "#FEBC11"  # Gold
+accent_color = "#09847A"     # Teal
+text_color = "#2C2F33"       # Dark text
+background_color = "#F8F9FA" # Light background
+card_background = "#FFFFFF"  # White cards
+border_color = "#D0D3D4"     # Light border
+light_background = "#EDF0F2" # Slightly darker light bg
+
+# Dark mode (toggled)
+dark_primary_color = "#4A9EFF"    # Bright blue
+dark_secondary_color = "#FEBC11"  # Gold
+dark_accent_color = "#2DD4BF"     # Bright teal
+dark_text_color = "#E4E4E7"       # Light gray text
+dark_background_color = "#0F0F0F" # Near black
+dark_card_background = "#1A1A1A"  # Dark cards
+dark_border_color = "#2A2A2A"     # Dark border
+dark_light_background = "#1F1F1F" # Slightly lighter dark
+
+# Language
+default_language = "en"

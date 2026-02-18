@@ -1,0 +1,230 @@
+.timeline-page {
+    padding: 4rem 0;
+}
+
+.timeline-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.timeline-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.timeline-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.timeline-header p {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Timeline line */
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: 1px;
+    background: var(--border-color);
+}
+
+/* Year markers */
+.year-marker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2rem 0 1rem 0;
+}
+
+.year-label {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -10px;
+    font-family: var(--font-family-heading, sans-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    white-space: nowrap;
+}
+
+.year-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+    margin-top: -6px;
+    width: 12px;
+    height: 12px;
+    background: var(--card-background);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    z-index: 10;
+}
+
+/* Events */
+.event {
+    display: flex;
+    align-items: baseline;
+    padding: 1.5rem 0;
+    position: relative;
+}
+
+.event.left {
+    justify-content: flex-start;
+    padding-right: 52%;
+}
+
+.event.right {
+    justify-content: flex-end;
+    padding-left: 52%;
+}
+
+.event .content {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    max-width: 45%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event .content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Time badge */
+.event-time {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: var(--font-family-heading, sans-serif);
+    margin-bottom: 1rem;
+}
+
+/* Event text */
+.text h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.3rem;
+}
+
+.text h3 a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.text h3 a:hover {
+    color: var(--accent-color, #09847A);
+}
+
+.text p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .timeline-page .container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .timeline-page {
+        padding: 2rem 0;
+    }
+
+    .timeline-header h1 {
+        font-size: 2rem;
+    }
+
+    .timeline-header p {
+        font-size: 1rem;
+    }
+
+    .timeline {
+        max-width: 100%;
+    }
+
+    /* Move timeline to the left on mobile */
+    .timeline::before {
+        left: 20px;
+        transform: none;
+    }
+
+    .year-marker {
+        padding-left: 50px;
+    }
+
+    .year-label {
+        left: 40px;
+        transform: none;
+        top: -10px;
+    }
+
+    .year-dot {
+        left: 20px;
+        transform: none;
+        top: 50%;
+        margin-top: -6px;
+    }
+
+    .event {
+        justify-content: flex-start;
+        padding-left: 50px;
+        padding-right: 0;
+    }
+
+    .event.left,
+    .event.right {
+        padding-left: 50px;
+        padding-right: 0;
+    }
+
+    .event .content {
+        max-width: 100%;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .timeline-header h1 {
+        color: var(--dark-primary-color, var(--primary-color));
+    }
+
+    .year-label {
+        color: var(--dark-primary-color, var(--primary-color));
+    }
+
+    .text h3 a {
+        color: var(--dark-primary-color, var(--primary-color));
+    }
+
+    .text h3 a:hover {
+        color: var(--dark-accent-color, var(--accent-color, #09847A));
+    }
+}

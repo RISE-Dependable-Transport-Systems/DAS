@@ -1,0 +1,205 @@
+{% import "macros.html" as macros %}
+<!DOCTYPE html>
+<html lang="{{ macros::get_lang() }}" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ config.title }}</title>
+    <meta name="description" content="{% if page.description %}{{ page.description }}{% elif section.description %}{{ section.description }}{% else %}{{ config.description }}{% endif %}">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ get_url(path="style.css") }}">
+    <link rel="stylesheet" href="{{ get_url(path="custom.css") }}">
+
+    <!-- Dynamic color configuration from config.toml -->
+    {% if config.extra.colors %}
+    <style>
+        :root {
+            --primary-color: {{ config.extra.colors.primary_color | default(value="#003660") }};
+            --secondary-color: {{ config.extra.colors.secondary_color | default(value="#FEBC11") }};
+            --accent-color: {{ config.extra.colors.accent_color | default(value="#09847A") }};
+            --text-color: {{ config.extra.colors.text_color | default(value="#2C2F33") }};
+            --background-color: {{ config.extra.colors.background_color | default(value="#F8F9FA") }};
+            --card-background: {{ config.extra.colors.card_background | default(value="#FFFFFF") }};
+            --border-color: {{ config.extra.colors.border_color | default(value="#D0D3D4") }};
+            --light-background: {{ config.extra.colors.light_background | default(value="#EDF0F2") }};
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        html.dark-mode {
+            --primary-color: {{ config.extra.colors.dark_primary_color | default(value="#4A9EFF") }};
+            --secondary-color: {{ config.extra.colors.dark_secondary_color | default(value="#FEBC11") }};
+            --accent-color: {{ config.extra.colors.dark_accent_color | default(value="#2DD4BF") }};
+            --text-color: {{ config.extra.colors.dark_text_color | default(value="#E4E4E7") }};
+            --background-color: {{ config.extra.colors.dark_background_color | default(value="#0F0F0F") }};
+            --card-background: {{ config.extra.colors.dark_card_background | default(value="#1A1A1A") }};
+            --border-color: {{ config.extra.colors.dark_border_color | default(value="#2A2A2A") }};
+            --light-background: {{ config.extra.colors.dark_light_background | default(value="#1F1F1F") }};
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+            --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Footer link styling */
+        .footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--border-color);
+        }
+
+        .theme-toggle-item {
+            margin-left: auto;
+        }
+
+        /* Push nav items to left, toggle to right */
+        .nav-menu {
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .nav-container {
+            justify-content: flex-start;
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        .theme-toggle .moon-icon {
+            display: block;
+        }
+
+        html.dark-mode .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        html.dark-mode .theme-toggle .moon-icon {
+            display: none;
+        }
+    </style>
+    {% endif %}
+
+    <!-- Prevent flash of wrong theme -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1.9.4/css/academicons.min.css">
+    <style>
+        .ai { font-family: 'Academicons', sans-serif !important; }
+    </style>
+    {% block extra_styles %}{% endblock extra_styles %}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ get_url(path="favicon.ico") }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Mobile menu button -->
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
+            <!-- Navigation links -->
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ macros::url_localized(path="/") }}" class="nav-link"><i class="fas fa-home"></i></a>
+                </li>
+                {% if config.extra.menu %}
+                    {% for item in config.extra.menu | sort(attribute="weight") %}
+                    <li class="nav-item">
+                        <a href="{{ macros::url_localized(path=item.url) }}" class="nav-link">{{ macros::t(key="nav." ~ item.name | lower | replace(from=" ", to="_")) }}</a>
+                    </li>
+                    {% endfor %}
+                {% endif %}
+                <li class="nav-item theme-toggle-item">
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon moon-icon"></i>
+                        <i class="fas fa-sun sun-icon"></i>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p style="font-size: 0.8em;">&copy; {{ now() | date(format="%Y") }} {{ config.extra.name | default(value=config.title) }}. <br> {{ macros::t(key="footer.copyright") }} <a href="https://www.getzola.org/">Zola</a> {{ macros::t(key="footer.using_theme") }} <a href="https://github.com/jskaza/peritus"><strong>peritus</strong></a> {{ macros::t(key="footer.theme_by") }} <a href="https://jskaza.github.io/">Jonathan Skaza</a>.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navMenu = document.getElementById('nav-menu');
+
+        mobileMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('is-active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            mobileMenu.classList.remove('is-active');
+            navMenu.classList.remove('active');
+        }));
+
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+
+        themeToggle.addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark-mode');
+            const isDark = document.documentElement.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    </script>
+</body>
+</html>

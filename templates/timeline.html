@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ get_url(path="timeline.css") }}">
+{% endblock extra_styles %}
+
+{% block content %}
+<div class="timeline-page">
+    <div class="container">
+        <div class="timeline-header">
+            <h1>{{ section.title }}</h1>
+            {% if section.description %}
+            <p>{{ section.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="timeline">
+            {% set projects_section = get_section(path="projects/_index.md") %}
+            {% set pages_with_years = projects_section.pages | filter(attribute="extra.year_start") | sort(attribute="extra.year_start") %}
+            
+            {% set current_year = now() | date(format="%Y") | int %}
+            {% set prev_year = 0 %}
+
+            {% for project in pages_with_years %}
+                {% set year = project.extra.year_start %}
+                
+                {% if year != prev_year %}
+                    <div class="year-marker">
+                        <span class="year-label">{{ year }}</span>
+                        <div class="year-dot"></div>
+                    </div>
+                    {% set_global prev_year = year %}
+                {% endif %}
+
+                {% set is_even = loop.index is divisibleby(2) %}
+                {% if is_even %}
+                <div class="event right">
+                {% else %}
+                <div class="event left">
+                {% endif %}
+                    <div class="content">
+                        <time class="event-time">
+                            {% if project.extra.year_end is defined %}
+                                {% if project.extra.year_end is string and project.extra.year_end != "" %}
+                                    {{ project.extra.year_start }} – {{ project.extra.year_end }}
+                                {% elif project.extra.year_end is number %}
+                                    {{ project.extra.year_start }} – {{ project.extra.year_end }}
+                                {% else %}
+                                    {{ project.extra.year_start }} – Present
+                                {% endif %}
+                            {% else %}
+                                {{ project.extra.year_start }} – Present
+                            {% endif %}
+                        </time>
+                        <div class="text">
+                            <h3><a href="{{ project.permalink }}">{{ project.title }}</a></h3>
+                            {% if project.extra.description %}
+                            <p>{{ project.extra.description }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

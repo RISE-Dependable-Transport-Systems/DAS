@@ -1,0 +1,42 @@
+[nav]
+team = "Team"
+projects = "Projects"
+timeline = "Timeline"
+software = "Software"
+
+[footer]
+copyright = "Built with"
+using_theme = "using the"
+theme_by = "theme by"
+
+[common]
+present = "Present"
+website = "Website"
+code = "Code"
+video = "Video"
+source = "Source"
+documentation = "Documentation"
+links = "Links"
+profiles = "Profiles"
+
+[page]
+project_period = "Project Period:"
+position = "Position:"
+people_involved = "People Involved"
+projects = "Projects"
+links = "Links"
+
+[projects]
+ongoing = "Ongoing Projects"
+completed = "Completed Projects"
+
+[index]
+about_us = "About Us"
+
+[team]
+team_title = "Team"
+team_description = "Our research team members"
+
+[software]
+software_title = "Software"
+software_description = "Software tools and applications developed by the team"

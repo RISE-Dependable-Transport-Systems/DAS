@@ -1,0 +1,21 @@
+// Custom style enhancements for both light and dark modes
+
+// Smooth transitions when switching themes
+body,
+.navbar,
+.footer,
+.project-card,
+.supervision-item,
+.blog-card,
+.item-card {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+// Better secondary text color that works in both modes
+.item-description,
+.item-summary,
+.publication-description,
+.blog-excerpt,
+.reading-time {
+  opacity: 0.75;
+}

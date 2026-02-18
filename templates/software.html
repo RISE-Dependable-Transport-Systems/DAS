@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<div class="section-template">
+    <div class="container">
+        <div class="section-header">
+            <h1>{{ section.title }}</h1>
+            {% if section.description %}
+            <p>{{ section.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="section-content">
+            {% if section.content %}
+                {{ section.content | safe }}
+            {% endif %}
+
+            {% set software = load_data(path="data/software.toml") %}
+            
+            <div class="software-list">
+                {% for item in software.software %}
+                <div class="software-item">
+                    <div class="software-header">
+                        <h3 class="software-name">{{ item.name }}</h3>
+                    </div>
+                    {% if item.description %}
+                    <p class="software-description">{{ item.description }}</p>
+                    {% endif %}
+                    <div class="software-links">
+                        {% if item.website %}
+                        <a href="{{ item.website }}" class="software-link" target="_blank" rel="noopener">
+                            <i class="fas fa-globe"></i> {{ macros::t(key="common.website") }}
+                        </a>
+                        {% endif %}
+                        {% if item.github %}
+                        <a href="{{ item.github }}" class="software-link" target="_blank" rel="noopener">
+                            <i class="fab fa-github"></i> {{ macros::t(key="common.source") }}
+                        </a>
+                        {% endif %}
+                        {% if item.documentation %}
+                        <a href="{{ item.documentation }}" class="software-link" target="_blank" rel="noopener">
+                            <i class="fas fa-book"></i> {{ macros::t(key="common.documentation") }}
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.software-list {
+    max-width: 900px;
+    margin: 3rem auto;
+}
+
+.software-item {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.software-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--hover-shadow);
+    transform: translateX(4px);
+}
+
+.software-header {
+    margin-bottom: 1rem;
+}
+
+.software-name {
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.software-description {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0 0 1.5rem 0;
+}
+
+.software-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.software-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.software-link:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.software-link i {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .software-links {
+        flex-direction: column;
+    }
+    
+    .software-link {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+{% endblock content %}

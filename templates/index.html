@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block extra_styles %}
+<style>
+.hero-section {
+    background-color: var(--background-color);
+    padding: 4rem 1rem;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bio-section {
+    width: 100%;
+}
+
+.name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.role {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.organization, .location {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin: 0.25rem 0;
+    opacity: 0.9;
+}
+
+.bio {
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.bio h3 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+ .bio div {
+     line-height: 1.8;
+     color: var(--text-color);
+     font-size: 1.05rem;
+ }
+
+ .social-links {
+     display: flex;
+     justify-content: center;
+     gap: 1rem;
+     flex-wrap: wrap;
+     margin-top: 2.5rem;
+ }
+
+ .social-link {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     padding: 0.75rem;
+     width: 3rem;
+     height: 3rem;
+     background-color: var(--primary-color);
+     color: white;
+     text-decoration: none;
+     border-radius: 50%;
+     font-weight: 500;
+     transition: all 0.3s ease;
+ }
+
+ .social-link:hover {
+     background-color: var(--accent-color);
+     transform: translateY(-2px);
+     box-shadow: var(--hover-shadow);
+ }
+
+  .social-link i {
+      font-size: 1.5rem;
+  }
+
+@media (max-width: 768px) {
+    .name {
+        font-size: 2rem;
+    }
+    
+    .role {
+        font-size: 1.25rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 1rem;
+    }
+}
+</style>
+{% endblock extra_styles %}
+
+{% block content %}
+{% set is_sv = section.path is containing("sv") %}
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <div class="bio-section">
+                <h1 class="name">{% if is_sv %}{{ config.extra.sv.name }}{% else %}{{ config.extra.name | default(value=config.title) }}{% endif %}</h1>
+                <h2 class="role">{% if is_sv %}{{ config.extra.sv.role }}{% else %}{{ config.extra.role }}{% endif %}</h2>
+                <p class="organization">{% if is_sv %}{{ config.extra.sv.organization }}{% else %}{{ config.extra.organization }}{% endif %}</p>
+                <p class="location">{% if is_sv %}{{ config.extra.sv.location }}{% else %}{{ config.extra.location }}{% endif %}</p>
+
+                  <div class="bio">
+                      <h3>{{ macros::t(key="index.about_us") }}</h3>
+                      <div>{{ section.content | safe }}</div>
+                  </div>
+
+                 <div class="social-links">
+                     {% if config.extra.researchgate_url %}
+                     <a href="{{ config.extra.researchgate_url }}" class="social-link" target="_blank" rel="noopener" aria-label="ResearchGate">
+                         <i class="ai ai-researchgate"></i>
+                     </a>
+                     {% endif %}
+                     {% if config.extra.google_scholar_url %}
+                     <a href="{{ config.extra.google_scholar_url }}" class="social-link" target="_blank" rel="noopener" aria-label="Google Scholar">
+                         <i class="ai ai-google-scholar"></i>
+                     </a>
+                     {% endif %}
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

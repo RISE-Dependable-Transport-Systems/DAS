@@ -15,11 +15,15 @@
         </div>
 
         <div class="timeline">
+            <div class="timeline-line"></div>
+            <div class="timeline-segments" id="timelineSegments"></div>
+            
             {% set projects_section = get_section(path="projects/_index.md") %}
             {% set pages_with_years = projects_section.pages | filter(attribute="extra.year_start") | sort(attribute="extra.year_start") %}
             
             {% set current_year = now() | date(format="%Y") | int %}
             {% set prev_year = 0 %}
+            {% set project_data = [] %}
 
             {% for project in pages_with_years %}
                 {% set year = project.extra.year_start %}
@@ -34,11 +38,11 @@
 
                 {% set is_even = loop.index is divisibleby(2) %}
                 {% if is_even %}
-                <div class="event right">
+                <div class="event right" data-project-index="{{ loop.index0 }}">
                 {% else %}
-                <div class="event left">
+                <div class="event left" data-project-index="{{ loop.index0 }}">
                 {% endif %}
-                    <div class="content">
+                    <div class="content" data-project-index="{{ loop.index0 }}">
                         <time class="event-time">
                             {% if project.extra.year_end is defined %}
                                 {% if project.extra.year_end is string and project.extra.year_end != "" %}
@@ -60,8 +64,87 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Store project data for JavaScript -->
+                <div class="project-data"
+                     data-project-id="{{ loop.index0 }}"
+                     data-start="{{ project.extra.year_start }}"
+                     data-end="{% if project.extra.year_end is defined %}{% if project.extra.year_end is string and project.extra.year_end != "" %}{{ project.extra.year_end }}{% elif project.extra.year_end is number %}{{ project.extra.year_end }}{% else %}{{ current_year }}{% endif %}{% else %}{{ current_year }}{% endif %}"
+                     style="display: none;"></div>
             {% endfor %}
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const segmentsContainer = document.getElementById('timelineSegments');
+    if (!segmentsContainer) return;
+
+    const projectDataElements = document.querySelectorAll('.project-data');
+    const projects = [];
+
+    projectDataElements.forEach(el => {
+        const start = parseInt(el.dataset.start);
+        const end = parseInt(el.dataset.end);
+        if (!isNaN(start) && !isNaN(end)) {
+            projects.push({ start, end });
+        }
+    });
+
+    if (projects.length === 0) return;
+
+    const minYear = Math.min(...projects.map(p => p.start));
+    const maxYear = Math.max(...projects.map(p => p.end));
+    const yearRange = maxYear - minYear;
+
+    const colors = [
+        '#E74C3C', // Red
+        '#3498DB', // Blue
+        '#2ECC71', // Green
+        '#F39C12', // Orange
+        '#9B59B6', // Purple
+        '#1ABC9C', // Teal
+        '#E67E22', // Dark Orange
+        '#34495E', // Navy
+        '#16A085', // Green Sea
+        '#8E44AD'  // Dark Purple
+    ];
+
+    projects.forEach((project, index) => {
+        const color = colors[index % colors.length];
+
+        // Create segment
+        const segment = document.createElement('div');
+        segment.className = 'project-segment';
+
+        const topPercent = ((project.start - minYear) / yearRange) * 100;
+        const heightPercent = ((project.end - project.start) / yearRange) * 100;
+
+        segment.style.top = `${topPercent}%`;
+        segment.style.height = `${heightPercent}%`;
+        segment.style.backgroundColor = color;
+        segment.title = `${project.start} – ${project.end}`;
+
+        segmentsContainer.appendChild(segment);
+
+        // Apply color to matching project card
+        const eventCards = document.querySelectorAll('.event');
+        const matchingCard = eventCards[index];
+        if (matchingCard) {
+            const content = matchingCard.querySelector('.content');
+            const timeBadge = matchingCard.querySelector('.event-time');
+
+            if (content) {
+                content.style.borderColor = color;
+                content.style.boxShadow = `0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0 3px ${color}`;
+            }
+
+            if (timeBadge) {
+                timeBadge.style.backgroundColor = color;
+            }
+        }
+    });
+});
+</script>
 {% endblock content %}

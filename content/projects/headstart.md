@@ -2,8 +2,8 @@
 title = "Headstart"
 
 [extra]
-year_start = 2023
-year_end = ""
+year_start = 2019
+year_end = 2022
 description = "Research project focused on autonomous systems development."
 url = ""
 code = ""

@@ -2,8 +2,8 @@
 title = "CyREC"
 
 [extra]
-year_start = 2023
-year_end = 2026
+year_start = 2022
+year_end = 2025
 description = "Cybersecurity for Resilient Energy Communities of the Future. Security methods for cloud-based energy systems."
 url = "https://www.ri.se/en/cybersecurity/project/cybersecurity-for-resilient-energy-communities-of-the-future"
 code = ""

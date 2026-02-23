@@ -70,9 +70,9 @@
 {% macro url_localized(path) %}
   {% set current_path = section.path | default(value=page.path) %}
   {% if current_path is containing("sv") %}
-    /sv{{ path }}
+    {{ get_url(path="sv" ~ path) }}
   {% else %}
-    {{ path }}
+    {{ get_url(path=path) }}
   {% endif %}
 {% endmacro url_localized %}
 

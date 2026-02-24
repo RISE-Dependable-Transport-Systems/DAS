@@ -25,7 +25,7 @@ taxonomies = []
 [markdown]
 # Enable smart punctuation
 smart_punctuation = true
-
+Institu
 [extra]
 # Team information
 name = "Dependable and Autonomous Systems"
@@ -47,7 +47,7 @@ google_scholar_url = "https://scholar.google.com/citations?hl=en&user=u0gw3sEAAA
 [extra.sv]
 name = "Pålitliga Autonoma System"
 role = "Forskningsenhet"
-organization = "Research Institute of Sweden"
+organization = "Research Institutes of Sweden"
 location = ", Sverige"
 
 # Navigation menu

@@ -25,7 +25,7 @@ taxonomies = []
 [markdown]
 # Enable smart punctuation
 smart_punctuation = true
-Institu
+
 [extra]
 # Team information
 name = "Dependable and Autonomous Systems"

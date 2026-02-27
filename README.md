@@ -66,7 +66,7 @@ Each team member has their own page with:
 7. Mateen Malik
 8. Mazen Mohamad
 9. Martin Skoglund
-10. Ramana Reddy
+10. Ramana Avula
 11. Peter Folkesson
 12. Pierre Kleberger
 13. Karl Lundgren
